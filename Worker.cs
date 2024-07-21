@@ -1,12 +1,16 @@
+using SendMessage.Models.Interfaces;
+
 namespace SendMessage
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly ISendMessage _sendMessage;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, ISendMessage sendMessage)
         {
             _logger = logger;
+            _sendMessage = sendMessage;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
