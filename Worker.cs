@@ -1,4 +1,5 @@
-using SendMessage.Models.Interfaces;
+using SendMessage.Interfaces;
+using SendMessage.Models;
 
 namespace SendMessage
 {
@@ -17,8 +18,19 @@ namespace SendMessage
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                string accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+                string authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
+
+                TwilioConfiguration config = new TwilioConfiguration()
+                {
+                    AccountSid = accountSid,
+                    AuthToken = authToken
+                };
+
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
+
+                _sendMessage.Send(config);
             }
         }
     }
